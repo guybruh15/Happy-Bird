@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flappy Bird Login</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url("images/background-img.png") no-repeat center center/cover;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 0;
+    }
+
+    /* Main Layout */
+    .container {
+      display: flex;
+      width: 900px;
+      max-width: 95%;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1;
+      gap: 40px;
+    }
+
+    /* LEFT SIDE GAME BRAND */
+    .game-brand {
+      flex: 1;
+      color: white;
+      text-align: left;
+      animation: fadeInLeft 1s ease;
+    }
+
+    .game-brand h1 {
+      font-size: 55px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .game-brand img {
+      width: 70px;
+      height: 70px;
+    }
+
+    .game-brand p {
+      margin-top: 15px;
+      font-size: 18px;
+      opacity: 0.85;
+      max-width: 320px;
+      line-height: 1.4;
+    }
+
+    /* RIGHT SIDE LOGIN BOX */
+    .login-box {
+      width: 380px;
+      padding: 40px 30px;
+      border-radius: 20px;
+
+      /* ✅ BLUE GLASS EFFECT */
+      background: rgba(0, 80, 200, 0.35);
+      border: 2px solid rgba(100, 180, 255, 0.5);
+
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+      text-align: center;
+      animation: fadeIn 0.8s ease;
+    }
+
+    h2 {
+      color: white;
+      margin-bottom: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      font-size: 15px;
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(102, 126, 234, 0.6);
+    }
+
+    .toggle {
+      margin-top: 15px;
+      font-size: 14px;
+      color: white;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* MOBILE RESPONSIVE */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .game-brand {
+        text-align: center;
+      }
+
+      .game-brand h1 {
+        justify-content: center;
+        font-size: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- LEFT GAME NAME + LOGO -->
+    <div class="game-brand">
+      <h1>
+        <img src="images/Bird-2.png" alt="Game Logo">
+        Flappy Bird
+      </h1>
+      <p>
+        Fly through the pipes, beat your high score, and enjoy the classic arcade fun!
+      </p>
+    </div>
+
+    <!-- RIGHT LOGIN FORM -->
+    <div class="login-box">
+      <h2 id="formTitle">✨ Login</h2>
+
+      <input type="text" id="username" placeholder="Enter Username">
+      <input type="password" id="password" placeholder="Enter Password">
+
+      <button onclick="submitForm()" id="mainBtn">Login</button>
+
+      <p class="toggle" onclick="toggleForm()" id="toggleText">
+        Don't have an account? Sign Up
+      </p>
+
+      <div class="message" id="message"></div>
+    </div>
+
+  </div>
+
+  <script>
+    let isSignup = false;
+
+    function toggleForm() {
+      isSignup = !isSignup;
+
+      document.getElementById("formTitle").textContent =
+        isSignup ? "✨ Sign Up" : "Login to Play!";
+
+      document.getElementById("mainBtn").textContent =
+        isSignup ? "Create Account" : "Login";
+
+      document.getElementById("toggleText").textContent =
+        isSignup
+          ? "Already have an account? Login"
+          : "Don't have an account? Sign Up";
+
+      document.getElementById("message").textContent = "";
+    }
+
+    function submitForm() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const message = document.getElementById("message");
+
+      if (user === "" || pass === "") {
+        message.style.color = "salmon";
+        message.textContent = "Please fill in all fields!";
+        return;
+      }
+
+      let accounts = JSON.parse(localStorage.getItem("accounts")) || {};
+
+      if (isSignup) {
+        if (accounts[user]) {
+          message.style.color = "salmon";
+          message.textContent = "Username already exists!";
+        } else {
+          accounts[user] = pass;
+          localStorage.setItem("accounts", JSON.stringify(accounts));
+
+          message.style.color = "lightgreen";
+          message.textContent = "Account created successfully! ✅";
+
+          setTimeout(() => toggleForm(), 1200);
+        }
+      } else {
+        if (accounts[user] && accounts[user] === pass) {
+          localStorage.setItem("loggedIn", "true");
+
+          message.style.color = "lightgreen";
+          message.textContent = "Login successful! Redirecting...";
+
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 800);
+        } else {
+          message.style.color = "salmon";
+          message.textContent = "Invalid username or password!";
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>
